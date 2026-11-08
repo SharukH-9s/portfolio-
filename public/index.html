@@ -50,19 +50,62 @@
   <main id="main">
     <!-- Hero -->
     <section class="hero" id="home" aria-labelledby="hero-title">
-      <div class="container">
-        <p class="hero-eyebrow">Hi, I’m</p>
-        <h1 id="hero-title">Mohaiminul Hassan Sharukh</h1>
-        <p class="hero-role">Backend &amp; Full-Stack Developer</p>
-        <p class="tagline">
-          <span class="tagline-item">Building production-grade systems with Rust &amp; React</span>
-          <span class="tagline-item" aria-hidden="true">Distributed systems · DevOps · AI-powered applications</span>
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects">View Projects ↓</a>
-          <a class="btn" href="assets/Sharukh-CV.pdf" download>Download CV</a>
-          <a class="btn" href="https://github.com/SharukH-9s" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
-          <a class="btn" href="https://www.linkedin.com/in/mohaiminul-hasan-dev" target="_blank" rel="noopener noreferrer">LinkedIn ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <p class="hero-eyebrow">Hi, I’m</p>
+          <h1 id="hero-title">Mohaiminul Hassan Sharukh</h1>
+          <p class="hero-role">Backend &amp; Full-Stack Developer</p>
+          <p class="tagline">
+            <span class="tagline-item">Building production-grade systems with Rust &amp; React</span>
+            <span class="tagline-item" aria-hidden="true">Distributed systems · DevOps · AI-powered applications</span>
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">View Projects ↓</a>
+            <a class="btn" href="assets/Sharukh-CV.pdf" download>Download CV</a>
+            <a class="btn" href="https://github.com/SharukH-9s" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="btn" href="https://www.linkedin.com/in/mohaiminul-hasan-dev" target="_blank" rel="noopener noreferrer">LinkedIn ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="terminal-card">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot dot-red"></span>
+                <span class="terminal-dot dot-yellow"></span>
+                <span class="terminal-dot dot-green"></span>
+              </div>
+              <span class="terminal-title">tbd-backend · axum v0.8</span>
+              <span class="terminal-badge"><span class="badge-pulse"></span>healthy</span>
+            </div>
+            <div class="terminal-body">
+              <p class="terminal-cmd"><span class="terminal-prompt">$</span> cargo run --release --bin tbd-backend</p>
+              <div class="terminal-logs">
+                <p><span class="log-time">[0.012s]</span> <span class="log-tag">INFO</span> runtime: tokio multi-thread (4 workers)</p>
+                <p><span class="log-time">[0.018s]</span> <span class="log-tag">INFO</span> database: PostgreSQL pool initialized (Neon)</p>
+                <p><span class="log-time">[0.024s]</span> <span class="log-tag">INFO</span> cache: L1 Moka (30s) + L2 Redis connected</p>
+                <p><span class="log-time">[0.031s]</span> <span class="log-tag">INFO</span> outbox: RabbitMQ topic exchange 'tbd.events'</p>
+                <p><span class="log-time">[0.045s]</span> <span class="log-tag">INFO</span> security: Cloudflare PSK handshake active</p>
+              </div>
+              <div class="terminal-stats">
+                <div class="stat-pill">
+                  <span class="stat-label">P99 Latency</span>
+                  <span class="stat-value text-green">3.4 ms</span>
+                </div>
+                <div class="stat-pill">
+                  <span class="stat-label">Memory</span>
+                  <span class="stat-value text-blue">21.8 MB</span>
+                </div>
+                <div class="stat-pill">
+                  <span class="stat-label">Outbox Relay</span>
+                  <span class="stat-value text-green">draining</span>
+                </div>
+                <div class="stat-pill">
+                  <span class="stat-label">SQLx Verify</span>
+                  <span class="stat-value text-purple">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

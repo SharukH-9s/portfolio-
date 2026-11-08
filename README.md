@@ -9,7 +9,7 @@ public/   deployed site (Vercel Output Directory = public)
 admin/    local-only admin tool, never deployed
 ```
 
-Content lives in `public/data/projects.json` (projects + embedded notes) and `public/data/blog.json`.
+Content lives in `public/data/projects.json` (projects + embedded notes), `public/data/blog.json` and `public/data/skills.json` (skill groups: `{ "group": "Languages", "items": ["Rust", ...] }`, shown in file order).
 
 ## Run locally
 

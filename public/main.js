@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const { el, safeUrl, externalLink, renderLanguages, getProjects } = window.Content;
+  const { el, safeUrl, externalLink, renderLanguages, getProjects, getSkills } = window.Content;
 
   /* ---------- Project card ---------- */
 
@@ -111,6 +111,52 @@
     }
   }
 
+  /* ---------- Skills ---------- */
+
+  const skillsContent = document.getElementById('skills-content');
+
+  function renderSkills(groups) {
+    const list = el('dl', { class: 'skills' });
+    groups.forEach(({ group, items }) => {
+      const pills = el('ul', { class: 'pills' });
+      items.forEach((item) => pills.append(el('li', { class: 'pill', text: item })));
+      list.append(el('div', { class: 'skill-row' }, el('dt', { text: group }), el('dd', {}, pills)));
+    });
+    return list;
+  }
+
+  async function loadSkills() {
+    skillsContent.setAttribute('aria-busy', 'true');
+    skillsContent.replaceChildren(
+      el('div', { class: 'skeleton skeleton-short', 'aria-hidden': 'true' }),
+      el('p', { class: 'visually-hidden', text: 'Loading skills…' })
+    );
+    try {
+      const groups = await getSkills();
+      if (!groups.length) {
+        skillsContent.replaceChildren(
+          el('div', { class: 'state-box' }, el('p', { text: 'Skills coming soon.' }))
+        );
+      } else {
+        skillsContent.replaceChildren(renderSkills(groups));
+      }
+    } catch (error) {
+      console.error('Failed to load skills:', error);
+      const retry = el('button', { class: 'btn', type: 'button', text: 'Try again' });
+      retry.addEventListener('click', loadSkills);
+      skillsContent.replaceChildren(
+        el(
+          'div',
+          { class: 'state-box', role: 'alert' },
+          el('p', { text: 'Sorry, the skills could not be loaded.' }),
+          retry
+        )
+      );
+    } finally {
+      skillsContent.setAttribute('aria-busy', 'false');
+    }
+  }
+
   /* ---------- Scroll fade-in ---------- */
 
   function initReveal() {
@@ -184,4 +230,5 @@
   initReveal();
   initCopyEmail();
   loadProjects();
+  loadSkills();
 })();

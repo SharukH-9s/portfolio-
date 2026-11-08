@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin (local) — Portfolio</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <a class="skip-link" href="#view">Skip to content</a>
+
+  <div class="layout">
+    <aside class="sidebar" aria-label="Admin navigation">
+      <h1 class="brand">Admin <span class="muted">(local)</span></h1>
+
+      <nav>
+        <ul class="nav-list">
+          <li><button type="button" data-nav="projects">Projects</button></li>
+          <li><button type="button" data-nav="import">Import from GitHub</button></li>
+          <li><button type="button" data-nav="blog">Blog posts</button></li>
+          <li><button type="button" data-nav="skills">Skills</button></li>
+        </ul>
+      </nav>
+
+      <section class="sidebar-section" aria-labelledby="export-heading">
+        <h2 id="export-heading">Export</h2>
+        <p id="draft-indicator" class="indicator" role="status"></p>
+        <div class="stack">
+          <button type="button" id="export-projects">Export projects.json</button>
+          <button type="button" id="export-blog">Export blog.json</button>
+          <button type="button" id="export-skills">Export skills.json</button>
+          <button type="button" id="write-folder" hidden>Write to folder…</button>
+          <button type="button" id="discard-draft" class="danger-outline">Discard draft (reset to live)</button>
+        </div>
+        <p class="hint">Drop the exported files into <code>public/data/</code>, commit and push.</p>
+      </section>
+    </aside>
+
+    <main class="main">
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+      <div id="problems" class="problems" role="alert" hidden></div>
+      <div id="view" tabindex="-1" aria-busy="true">Loading…</div>
+    </main>
+  </div>
+
+  <script src="../public/lib/marked.min.js"></script>
+  <script src="../public/lib/purify.min.js"></script>
+  <script src="../public/content.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

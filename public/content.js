@@ -1,7 +1,7 @@
 /* Shared content layer for all public pages.
  *
  * Exposes `window.Content`:
- *   data:      getProjects, getProject, getNotes, getNote, getPosts, getPost
+ *   data:      getProjects, getProject, getNotes, getNote, getPosts, getPost, getSkills
  *   markdown:  renderMarkdown (sanitized HTML string), renderMarkdownInto
  *   DOM:       el, safeUrl, externalLink, renderLanguages, renderPostCard,
  *              setMessage, setLoading, formatDate, setPageMeta
@@ -14,6 +14,7 @@
 
   const PROJECTS_URL = 'data/projects.json';
   const BLOG_URL = 'data/blog.json';
+  const SKILLS_URL = 'data/skills.json';
   const SITE_NAME = 'Mohaiminul Hassan Sharukh';
 
   const LANGUAGE_COLORS = {
@@ -248,6 +249,22 @@
     return posts.find((post) => post.id === id) || null;
   }
 
+  // Skill groups in file order: [{ group: 'Languages', items: ['Rust', ...] }]
+  async function getSkills() {
+    const groups = await loadJson(SKILLS_URL);
+    return groups
+      .filter((entry) => {
+        const ok = entry && typeof entry.group === 'string' && entry.group && Array.isArray(entry.items);
+        if (!ok) console.warn('Skipping invalid skills entry:', entry);
+        return ok;
+      })
+      .map((entry) => ({
+        group: entry.group,
+        items: entry.items.filter((item) => typeof item === 'string' && item),
+      }))
+      .filter((entry) => entry.items.length);
+  }
+
   /* ---------- Markdown ---------- */
 
   function escapeHtml(text) {
@@ -304,6 +321,7 @@
     getNote,
     getPosts,
     getPost,
+    getSkills,
     renderMarkdown,
     renderMarkdownInto,
   };

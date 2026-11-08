@@ -1,0 +1,8 @@
+[
+  { "group": "Languages", "items": ["Rust", "Python", "TypeScript", "JavaScript", "C#"] },
+  { "group": "Frameworks", "items": ["Axum", "FastAPI", "React", "SQLx", "Tokio"] },
+  { "group": "Databases", "items": ["PostgreSQL", "Redis", "RabbitMQ"] },
+  { "group": "DevOps", "items": ["Docker", "GitHub Actions", "Caddy", "Nginx", "CI/CD"] },
+  { "group": "Observability", "items": ["OpenTelemetry", "Prometheus", "k6"] },
+  { "group": "AI & Platforms", "items": ["Gemini API", "Chrome MV3", "Unity"] }
+]

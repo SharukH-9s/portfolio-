@@ -535,21 +535,21 @@ flowchart TD
 Split in 3 sub-steps so each can be tested alone:
 
 **3a — Data & GitHub import**
-- [ ] `admin/index.html` layout + sidebar; load baseline from `../public/data/*.json`
-- [ ] URL parser, README (raw) + languages fetch, bytes→% conversion, error handling (404/403/network), optional token in `sessionStorage`
-- [ ] Project editor form with validation (slug, unique id, ≤5 highlights, URL formats); merge-on-reimport rules
-- [ ] Reorder (up/down) + featured toggle + delete with confirm
+- [x] `admin/index.html` layout + sidebar; load baseline from `../public/data/*.json`
+- [x] URL parser, README (raw) + languages fetch, bytes→% conversion, error handling (404/403/network), optional token in `sessionStorage`
+- [x] Project editor form with validation (slug, unique id, ≤5 highlights, URL formats); merge-on-reimport rules
+- [x] Reorder (up/down) + featured toggle + delete with confirm
 
 **3b — Notes & posts editor**
-- [ ] Split-pane markdown editor with live sanitized preview
-- [ ] Tags, date picker (defaults to today), summary field, slug auto-generation
-- [ ] Per-project notes CRUD and global blog CRUD
+- [x] Split-pane markdown editor with live sanitized preview
+- [x] Tags, date picker (defaults to today), summary field, slug auto-generation
+- [x] Per-project notes CRUD and global blog CRUD
 
 **3c — Drafts & export**
-- [ ] Autosave drafts to `localStorage`, "differs from live" indicator, discard/reset
-- [ ] Unsaved-changes warning
-- [ ] Export `projects.json` / `blog.json` (pretty-printed, 2-space indent, stable key order to keep git diffs small); optional File System Access write
-- [ ] Validate before export (block on errors)
+- [x] Autosave drafts to `localStorage`, "differs from live" indicator, discard/reset
+- [x] Unsaved-changes warning
+- [x] Export `projects.json` / `blog.json` (pretty-printed, 2-space indent, stable key order to keep git diffs small); optional File System Access write
+- [x] Validate before export (block on errors)
 
 **Done when:** you can import a repo, add a note, export, drop the files into `public/data/`, and the public site shows the changes; re-importing doesn't wipe notes.
 

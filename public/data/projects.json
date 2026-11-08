@@ -1,0 +1,62 @@
+[
+  {
+    "id": "tbd-backend",
+    "title": "TurfBD — Multi-Tenant Sports Booking Platform",
+    "github_url": "https://github.com/SharukH-9s/tbd-backend",
+    "demo_url": "",
+    "summary": "Multi-tenant sports turf booking backend in Rust with distributed rate limiting and reliable background jobs.",
+    "description": "TurfBD is a multi-tenant platform for booking sports turfs. The backend is written in Rust (Axum, SQLx, Tokio) on PostgreSQL, with Redis for distributed rate limiting and RabbitMQ for background work, and ships as Docker containers with CI/CD via GitHub Actions.",
+    "highlights": [
+      "Built a custom distributed Token Bucket rate limiter using an atomic Redis Lua script",
+      "Designed a Transactional Outbox Pattern with idempotency guarantees and dead-letter queuing"
+    ],
+    "tags": ["Rust", "Axum", "React", "PostgreSQL", "Redis", "RabbitMQ", "Docker"],
+    "languages": { "Rust": 94, "TypeScript": 4, "Shell": 2 },
+    "readme_excerpt": "",
+    "featured": true,
+    "order": 1,
+    "updated": "2026-11-08",
+    "notes": [
+      {
+        "id": "token-bucket-upgrade",
+        "title": "Why I replaced Fixed-Window with Token Bucket rate limiting",
+        "date": "2026-10-15",
+        "summary": "A look at boundary-loophole attacks and how Token Bucket eliminates them.",
+        "content": "## Background\n\nThe fixed window counter resets at a hard boundary, so a client can send a full quota at the end of one window and another full quota at the start of the next.\n\n## The fix\n\nA Token Bucket refills continuously and allows bursts up to a capacity, with the check-and-take done atomically in a Redis Lua script.\n\n```lua\n-- placeholder: replace with the real script\nreturn 1\n```\n\n> TODO: replace this sample note with the real write-up.",
+        "tags": ["redis", "rate-limiting", "rust"]
+      }
+    ]
+  },
+  {
+    "id": "adaptiveworld2d",
+    "title": "AdaptiveWorld2D",
+    "github_url": "",
+    "demo_url": "",
+    "summary": "TODO: one-line pitch. A 2D game with a self-healing AI-powered content pipeline.",
+    "description": "TODO: full description of AdaptiveWorld2D.",
+    "highlights": [],
+    "tags": ["Unity", "C#", "Gemini API"],
+    "languages": {},
+    "readme_excerpt": "",
+    "featured": false,
+    "order": 2,
+    "updated": "2026-11-08",
+    "notes": []
+  },
+  {
+    "id": "chatdistill",
+    "title": "ChatDistill",
+    "github_url": "",
+    "demo_url": "",
+    "summary": "TODO: one-line pitch. A Chrome MV3 extension built with vanilla DOM and scoped CSS.",
+    "description": "TODO: full description of ChatDistill.",
+    "highlights": [],
+    "tags": ["Chrome MV3", "JavaScript", "Gemini API"],
+    "languages": {},
+    "readme_excerpt": "",
+    "featured": false,
+    "order": 3,
+    "updated": "2026-11-08",
+    "notes": []
+  }
+]

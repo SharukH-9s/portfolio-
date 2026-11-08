@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mohaiminul Hassan Sharukh — Backend &amp; Full-Stack Developer</title>
+  <meta name="description" content="Portfolio of Mohaiminul Hassan Sharukh, a backend and full-stack developer building production-grade systems with Rust and React.">
+  <meta name="theme-color" content="#ffffff">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mohaiminul Hassan Sharukh — Backend &amp; Full-Stack Developer">
+  <meta property="og:description" content="Production-grade systems with Rust &amp; React. Distributed systems, DevOps and AI-powered applications.">
+  <!-- TODO (Phase 4): add og:image / twitter:image with an absolute URL once the live domain is known. -->
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#home" aria-label="Mohaiminul Hassan Sharukh, back to top">
+        <span class="brand-full">Mohaiminul Hassan Sharukh</span>
+        <span class="brand-short" aria-hidden="true">Sharukh</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="container">
+        <p class="hero-eyebrow">Hi, I’m</p>
+        <h1 id="hero-title">Mohaiminul Hassan Sharukh</h1>
+        <p class="hero-role">Backend &amp; Full-Stack Developer</p>
+        <p class="tagline">
+          <span class="tagline-item">Building production-grade systems with Rust &amp; React</span>
+          <span class="tagline-item" aria-hidden="true">Distributed systems · DevOps · AI-powered applications</span>
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View Projects ↓</a>
+          <a class="btn" href="assets/Sharukh-CV.pdf" download>Download CV</a>
+          <a class="btn" href="https://github.com/SharukH-9s" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section reveal" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-grid">
+          <div class="avatar" role="img" aria-label="Avatar placeholder with the initials M S">MS</div>
+          <div class="about-text">
+            <div class="section-head">
+              <h2 id="about-title">About</h2>
+            </div>
+            <p>I’m a final-year student who enjoys building backend systems that hold up under real load. My main stack is Rust (Axum, SQLx, Tokio) on PostgreSQL, with React on the front end when a project needs it.</p>
+            <p>Lately I’ve been digging into distributed rate limiting, reliable background jobs with the transactional outbox pattern, and shipping everything through Docker and CI/CD. I also build AI-powered tools on the side, from a Chrome extension to a 2D game with a self-healing content pipeline.</p>
+            <ul class="chips" aria-label="Quick facts">
+              <li class="chip" id="stat-projects" hidden></li></li>
+              <li class="chip">Graduating May 2027</li>
+              <li class="chip">Open to Work ✅</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="section section-alt reveal" id="projects" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="projects-title">Projects</h2>
+          <p>Things I’ve built, with the details of how and why.</p>
+        </div>
+        <div id="projects-content" aria-live="polite" aria-busy="true">
+          <noscript><p class="state-box">Projects need JavaScript to load. You can find everything on <a href="https://github.com/SharukH-9s">GitHub</a>.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section reveal" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="skills-title">Skills</h2>
+        </div>
+        <dl class="skills">
+          <div class="skill-row">
+            <dt>Languages</dt>
+            <dd><ul class="pills"><li class="pill">Rust</li><li class="pill">Python</li><li class="pill">TypeScript</li><li class="pill">JavaScript</li><li class="pill">C#</li></ul></dd>
+          </div>
+          <div class="skill-row">
+            <dt>Frameworks</dt>
+            <dd><ul class="pills"><li class="pill">Axum</li><li class="pill">FastAPI</li><li class="pill">React</li><li class="pill">SQLx</li><li class="pill">Tokio</li></ul></dd>
+          </div>
+          <div class="skill-row">
+            <dt>Databases</dt>
+            <dd><ul class="pills"><li class="pill">PostgreSQL</li><li class="pill">Redis</li><li class="pill">RabbitMQ</li></ul></dd>
+          </div>
+          <div class="skill-row">
+            <dt>DevOps</dt>
+            <dd><ul class="pills"><li class="pill">Docker</li><li class="pill">GitHub Actions</li><li class="pill">Caddy</li><li class="pill">Nginx</li><li class="pill">CI/CD</li></ul></dd>
+          </div>
+          <div class="skill-row">
+            <dt>Observability</dt>
+            <dd><ul class="pills"><li class="pill">OpenTelemetry</li><li class="pill">Prometheus</li><li class="pill">k6</li></ul></dd>
+          </div>
+          <div class="skill-row">
+            <dt>AI &amp; Platforms</dt>
+            <dd><ul class="pills"><li class="pill">Gemini API</li><li class="pill">Chrome MV3</li><li class="pill">Unity</li></ul></dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section section-alt contact reveal" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="contact-title">Get in touch</h2>
+          <p>I’m open to work and happy to talk about backend, infrastructure or anything in the projects above.</p>
+        </div>
+        <a class="contact-email" href="mailto:mohaiminul.hassan9988@gmail.com">mohaiminul.hassan9988@gmail.com</a>
+        <div class="contact-social">
+          <a class="btn btn-icon" href="https://github.com/SharukH-9s" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)">
+            <img src="assets/icons/github.svg" alt="" width="20" height="20">
+          </a>
+          <a class="btn btn-icon" href="https://www.linkedin.com/in/mohaiminul-hasan-dev" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)">
+            <img src="assets/icons/linkedin.svg" alt="" width="20" height="20">
+          </a>
+          <a class="btn btn-icon" href="mailto:mohaiminul.hassan9988@gmail.com" aria-label="Email">
+            <img src="assets/icons/mail.svg" alt="" width="20" height="20">
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Mohaiminul Hassan Sharukh</p>
+    </div>
+  </footer>
+</body>
+</html>

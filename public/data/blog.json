@@ -1,0 +1,10 @@
+[
+  {
+    "id": "vps-drill-learnings",
+    "title": "What I learned simulating a production VPS locally with Docker",
+    "date": "2026-11-01",
+    "summary": "Docker networking, multi-stage builds, and GitHub Actions CI/CD from scratch.",
+    "content": "## Why I did this\n\nPlaceholder post used to test rendering.\n\n- Docker networking\n- Multi-stage builds\n- CI/CD with GitHub Actions\n\n> TODO: replace with the real post.",
+    "tags": ["docker", "devops", "cicd"]
+  }
+]

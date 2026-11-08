@@ -1,5 +1,13 @@
 [
   {
+    "id": "this-is-a-demo",
+    "title": "This is a demo",
+    "date": "2026-11-08",
+    "summary": "xDDDD",
+    "content": "### Phase 3 — Local admin panel\nSplit in 3 sub-steps so each can be tested alone:\n\n**3a — Data & GitHub import**\n- [x] `admin/index.html` layout + sidebar; load baseline from `../public/data/*.json`\n- [x] URL parser, README (raw) + languages fetch, bytes→% conversion, error handling (404/403/network), optional token in `sessionStorage`\n- [x] Project editor form with validation (slug, unique id, ≤5 highlights, URL formats); merge-on-reimport rules\n- [x] Reorder (up/down) + featured toggle + delete with confirm\n\n**3b — Notes & posts editor**\n- [x] Split-pane markdown editor with live sanitized preview\n- [x] Tags, date picker (defaults to today), summary field, slug auto-generation\n- [x] Per-project notes CRUD and global blog CRUD\n\n**3c — Drafts & export**\n- [x] Autosave drafts to `localStorage`, \"differs from live\" indicator, discard/reset\n- [x] Unsaved-changes warning\n- [x] Export `projects.json` / `blog.json` (pretty-printed, 2-space indent, stable key order to keep git diffs small); optional File System Access write\n- [x] Validate before export (block on errors)\n",
+    "tags": ["Testing"]
+  },
+  {
     "id": "vps-drill-learnings",
     "title": "What I learned simulating a production VPS locally with Docker",
     "date": "2026-11-01",

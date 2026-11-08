@@ -4,5 +4,6 @@
   { "group": "Databases", "items": ["PostgreSQL", "Redis", "RabbitMQ"] },
   { "group": "DevOps", "items": ["Docker", "GitHub Actions", "Caddy", "Nginx", "CI/CD"] },
   { "group": "Observability", "items": ["OpenTelemetry", "Prometheus", "k6"] },
-  { "group": "AI & Platforms", "items": ["Gemini API", "Chrome MV3", "Unity"] }
+  { "group": "AI & Platforms", "items": ["Gemini API", "Chrome MV3", "Unity"] },
+  { "group": "Additional", "items": ["Mobile Photography"] }
 ]

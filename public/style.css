@@ -186,6 +186,7 @@ html {
 
 .site-header .container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
@@ -225,7 +226,8 @@ html {
   font-weight: 500;
 }
 
-.nav-list a:hover {
+.nav-list a:hover,
+.nav-list a[aria-current="page"] {
   color: var(--color-text);
   background: var(--color-surface);
   text-decoration: none;
@@ -233,7 +235,9 @@ html {
 
 @media (max-width: 480px) {
   .brand-full { display: none; }
-  .nav-list a { padding-inline: var(--space-2); font-size: 0.9rem; }
+  .brand { min-width: 44px; }
+  .nav-list { gap: 0; }
+  .nav-list a { padding-inline: 0.4rem; font-size: 0.85rem; }
 }
 
 @media (min-width: 481px) {
@@ -479,8 +483,11 @@ html {
 }
 
 .card-title {
-  padding-right: 5.5rem; /* room for the featured badge */
   font-size: 1.2rem;
+}
+
+.card--featured .card-title {
+  padding-right: 5.5rem; /* room for the featured badge */
 }
 
 .card-title a {
@@ -720,6 +727,199 @@ html {
   .card:hover,
   .card:focus-within { transform: none; }
   .skeleton { animation: none; }
+}
+
+/* ==========================================================================
+   Inner pages: blog, project detail, post
+   ========================================================================== */
+
+.page {
+  padding-block: var(--space-8) var(--space-16);
+  min-height: 70vh;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: var(--space-4);
+  font-weight: 500;
+}
+
+.page-header {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.page-header h1 {
+  font-size: clamp(1.75rem, 3vw + 1rem, 2.75rem);
+  max-width: 28ch;
+}
+
+.lead {
+  max-width: var(--measure);
+  color: var(--color-muted);
+  font-size: 1.125rem;
+}
+
+.meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.detail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.detail-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.post-list {
+  display: grid;
+  gap: var(--space-6);
+  max-width: 760px;
+}
+
+.skeleton-short {
+  min-height: 120px;
+}
+
+/* Hash-driven tabs */
+.tabs {
+  display: flex;
+  gap: var(--space-1);
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-4);
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.tab:hover {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.tab[aria-current="page"] {
+  border-bottom-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.detail-section {
+  margin-top: var(--space-8);
+}
+
+.detail-section h2 {
+  margin-bottom: var(--space-3);
+  font-size: 1.25rem;
+}
+
+/* ---------- Rendered markdown ---------- */
+
+.prose {
+  max-width: var(--measure);
+  overflow-wrap: break-word;
+}
+
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+
+.prose > p + p {
+  margin-top: var(--space-4);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin-top: var(--space-8);
+}
+
+.prose h1 { font-size: 1.75rem; }
+.prose h2 { font-size: 1.5rem; }
+.prose h3 { font-size: 1.25rem; }
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+}
+
+.prose li + li {
+  margin-top: var(--space-1);
+}
+
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  background: var(--color-pill);
+}
+
+.prose pre {
+  padding: var(--space-4);
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  background: #0f172a;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  color: inherit;
+}
+
+.prose blockquote {
+  padding-left: var(--space-4);
+  border-left: 4px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.prose img {
+  border-radius: var(--radius-sm);
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-border);
 }
 
 /* ==========================================================================

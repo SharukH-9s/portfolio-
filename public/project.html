@@ -4,20 +4,52 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Project — Mohaiminul Hassan Sharukh</title>
-  <meta name="robots" content="noindex">
+  <meta name="description" content="Project details and engineering notes by Mohaiminul Hassan Sharukh.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Project — Mohaiminul Hassan Sharukh">
+  <meta property="og:description" content="Project details and engineering notes by Mohaiminul Hassan Sharukh.">
+  <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="lib/purify.min.js" defer></script>
+  <script src="lib/marked.min.js" defer></script>
+  <script src="content.js" defer></script>
+  <script src="project.js" defer></script>
 </head>
 <body>
-  <main class="stub">
-    <div>
-      <h1>Project details are coming soon</h1>
-      <p>The full write-up and notes for this project will be published here.</p>
-      <a class="btn btn-primary" href="index.html#projects">← Back to projects</a>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html" aria-label="Mohaiminul Hassan Sharukh, home">
+        <span class="brand-full">Mohaiminul Hassan Sharukh</span>
+        <span class="brand-short" aria-hidden="true">MS</span>
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-list">
+          <li><a href="index.html#projects">Projects</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <div class="container">
+      <a class="back-link" href="index.html#projects">← All projects</a>
+      <div id="project-root" aria-live="polite" aria-busy="true">
+        <noscript><p class="state-box">This page needs JavaScript to load.</p></noscript>
+      </div>
     </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Mohaiminul Hassan Sharukh</p>
+    </div>
+  </footer>
 </body>
 </html>

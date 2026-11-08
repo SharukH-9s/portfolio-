@@ -39,7 +39,7 @@ Use relative paths in public pages so they work under `/public/` locally and at 
 
 - `public/assets/Sharukh-CV.pdf` is a placeholder; replace it with your real CV.
 
-- `public/project.html` is a stub until Phase 2.
+
 
 ## Deploy (Vercel)
 

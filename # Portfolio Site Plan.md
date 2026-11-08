@@ -521,13 +521,13 @@ flowchart TD
 
 ### Phase 2 — Blog, project detail and post pages
 **Deliverables**
-- [ ] `content.js`: `getProjects()`, `getProject(id)`, `getNotes(projectId)`, `getPosts()`, `renderMarkdown(md)` (marked + DOMPurify)
-- [ ] `project.html`: Overview + Notes tabs (hash-driven)
-- [ ] `blog.html`: listing sorted by date desc
-- [ ] `post.html`: both `source=blog` and `source=project`; dynamic title/meta; back links
-- [ ] `404.html` and in-page not-found states for bad ids
-- [ ] Markdown styling (code blocks, headings, lists, links, images)
-- [ ] XSS check: a post containing `<script>` / `onerror=` renders harmlessly
+- [x] `content.js`: `getProjects()`, `getProject(id)`, `getNotes(projectId)`, `getPosts()`, `renderMarkdown(md)` (marked + DOMPurify)
+- [x] `project.html`: Overview + Notes tabs (hash-driven)
+- [x] `blog.html`: listing sorted by date desc
+- [x] `post.html`: both `source=blog` and `source=project`; dynamic title/meta; back links
+- [x] `404.html` and in-page not-found states for bad ids
+- [x] Markdown styling (code blocks, headings, lists, links, images)
+- [x] XSS check: a post containing `<script>` / `onerror=` renders harmlessly
 
 **Done when:** every link in the connection diagram works, bad URLs show a friendly state, and the XSS test passes. Push → redeploy.
 

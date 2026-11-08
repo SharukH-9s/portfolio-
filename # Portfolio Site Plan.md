@@ -555,13 +555,13 @@ Split in 3 sub-steps so each can be tested alone:
 
 ### Phase 4 — Polish, content, launch
 **Deliverables**
-- [ ] Mobile pass at 360 / 768 / 1280 px; no horizontal scroll; 44px tap targets
-- [ ] Accessibility pass: keyboard navigation, focus styles, contrast, alt text, heading order
-- [ ] Performance: image sizes, font loading, cache headers in `vercel.json`
-- [ ] Write 2+ real posts (from Upgrades docs) and 2+ TurfBD notes
-- [ ] Add live demo / Loom link for TurfBD if available
-- [ ] Contact form decision (Formspree with real ID, or mailto only)
-- [ ] Pre-launch checklist from the Deployment section
+- [x] Mobile pass at 360 / 768 / 1280 px; no horizontal scroll; 44px tap targets
+- [x] Accessibility pass: keyboard navigation, focus styles, contrast, alt text, heading order
+- [x] Performance: image sizes, font loading, cache headers in `vercel.json`
+- [x] Write 2+ real posts (from Upgrades docs) and 2+ TurfBD notes
+- [x] Add live demo / Loom link for TurfBD if available (empty string hides link gracefully until live URL exists)
+- [x] Contact form decision (direct mailto + copy email + Gmail compose: zero-dependency, spam-proof)
+- [x] Pre-launch checklist from the Deployment section (admin/ confirmed 404, security headers in vercel.json)
 
 **Done when:** checklist complete, Lighthouse ≥ 95 on Performance/Accessibility/Best Practices/SEO for index, and the URL is on your CV and LinkedIn.
 

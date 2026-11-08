@@ -412,6 +412,9 @@ html {
   font-weight: 700;
   letter-spacing: -0.02em;
   user-select: none;
+  object-fit: cover;
+  border: 3px solid var(--color-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .about-text p {

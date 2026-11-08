@@ -5,81 +5,67 @@
     "github_url": "https://github.com/SharukH-9s/tbd-backend",
     "demo_url": "",
     "summary": "Multi-tenant sports turf booking backend in Rust with distributed rate limiting and reliable background jobs.",
-    "description": "TurfBD is a production-grade multi-tenant platform for booking sports turfs. The backend is written in Rust using Axum, SQLx, and Tokio on PostgreSQL, backed by Redis for distributed rate limiting and RabbitMQ for asynchronous background job processing. Built with containerized microservices and automated CI/CD via GitHub Actions.",
+    "description": "TurfBD is a multi-tenant platform for booking sports turfs. The backend is written in Rust (Axum, SQLx, Tokio) on PostgreSQL, with Redis for distributed rate limiting and RabbitMQ for background work, and ships as Docker containers with CI/CD via GitHub Actions.",
     "highlights": [
-      "Built a custom distributed Token Bucket rate limiter using an atomic Redis Lua script with User-ID key extraction",
-      "Designed a Transactional Outbox Pattern with CloudAMQP (RabbitMQ) to eliminate distributed dual-write inconsistency",
-      "Enforced zero-runtime SQL failures with compile-time verified queries and offline query metadata caching in CI",
-      "Architected a dedicated background consumer worker (tbd-worker) with consumer idempotency and dead-letter queues"
+      "Built a custom distributed Token Bucket rate limiter using an atomic Redis Lua script",
+      "Designed a Transactional Outbox Pattern with idempotency guarantees and dead-letter queuing"
     ],
-    "tags": ["Rust", "Axum", "PostgreSQL", "Redis", "RabbitMQ", "Docker", "CI/CD"],
+    "tags": ["Rust", "Axum", "React", "PostgreSQL", "Redis", "RabbitMQ", "Docker"],
     "languages": { "Rust": 94, "TypeScript": 4, "Shell": 2 },
-    "readme_excerpt": "TurfBD is a backend platform providing high-concurrency booking reservations, tenant isolation, and automated payment receipts.",
+    "readme_excerpt": "",
     "featured": true,
     "order": 1,
     "updated": "2026-11-08",
     "notes": [
       {
+        "id": "test",
+        "title": "Test",
+        "date": "2026-11-08",
+        "summary": "",
+        "content": "### Phase 3 — Local admin panel\nSplit in 3 sub-steps so each can be tested alone:\n\n**3a — Data & GitHub import**\n- [x] `admin/index.html` layout + sidebar; load baseline from `../public/data/*.json`\n- [x] URL parser, README (raw) + languages fetch, bytes→% conversion, error handling (404/403/network), optional token in `sessionStorage`\n- [x] Project editor form with validation (slug, unique id, ≤5 highlights, URL formats); merge-on-reimport rules\n- [x] Reorder (up/down) + featured toggle + delete with confirm\n\n**3b — Notes & posts editor**\n- [x] Split-pane markdown editor with live sanitized preview\n- [x] Tags, date picker (defaults to today), summary field, slug auto-generation\n- [x] Per-project notes CRUD and global blog CRUD\n\n**3c — Drafts & export**\n- [x] Autosave drafts to `localStorage`, \"differs from live\" indicator, discard/reset\n- [x] Unsaved-changes warning\n- [x] Export `projects.json` / `blog.json` (pretty-printed, 2-space indent, stable key order to keep git diffs small); optional File System Access write\n- [x] Validate before export (block on errors)\n",
+        "tags": []
+      },
+      {
         "id": "token-bucket-upgrade",
         "title": "Why I replaced Fixed-Window with Token Bucket rate limiting",
         "date": "2026-10-15",
-        "summary": "A deep dive into boundary-loophole attacks, Redis Lua atomicity, and User-ID extraction for NAT/VPN clients.",
-        "tags": ["redis", "rate-limiting", "rust", "distributed-systems"],
-        "content": "## Background & The Boundary-Loophole Attack\n\nThe initial implementation of rate limiting relied on node-local memory via `tower-governor`. While simple for a single instance, it suffered from two fundamental limitations:\n\n1. **Boundary Loophole:** Fixed-window rate limiters reset their quota counters at fixed intervals (e.g. at the top of the minute). A malicious actor or bursty client can send their full quota at `00:59` and another full quota at `01:00`, effectively sending **2x the limit in a 2-second burst** without being throttled.\n2. **Instance Multiplication:** In a multi-replica container environment, each node maintains its own independent memory counter. A limit of 10 req/min across 3 backend replicas effectively permits 30 req/min.\n\n## The Token Bucket Solution\n\nTo solve both problems, we migrated to a **distributed Token Bucket algorithm** backed by Redis. \n\nInstead of resetting quotas abruptly, a Token Bucket refills continuously at a constant rate ($r$ tokens/second) up to a burst capacity ($C$). Every incoming request consumes one token. If no tokens remain, the request is immediately rejected with HTTP `429 Too Many Requests`.\n\n### Atomic Evaluation via Redis Lua\n\nEvaluating the bucket requires reading the current token count, calculating elapsed time since last refill, replenishing tokens, and decrementing—all without race conditions. Doing this across multiple network roundtrips would introduce critical concurrency races.\n\nWe implemented the check-and-take logic as an **atomic Redis Lua script**:\n\n```lua\nlocal key = KEYS[1]\nlocal capacity = tonumber(ARGV[1])\nlocal refill_rate = tonumber(ARGV[2])\nlocal requested = tonumber(ARGV[3])\nlocal now = tonumber(ARGV[4])\n\nlocal data = redis.call('HMGET', key, 'tokens', 'last_refill')\nlocal tokens = tonumber(data[1])\nlocal last_refill = tonumber(data[2])\n\nif not tokens then\n  tokens = capacity\n  last_refill = now\nelse\n  local elapsed = math.max(0, now - last_refill)\n  tokens = math.min(capacity, tokens + (elapsed * refill_rate))\n  last_refill = now\nend\n\nif tokens >= requested then\n  tokens = tokens - requested\n  redis.call('HMSET', key, 'tokens', tokens, 'last_refill', last_refill)\n  redis.call('EXPIRE', key, math.ceil(capacity / refill_rate) * 2)\n  return { 1, math.floor(tokens) }\nelse\n  redis.call('HMSET', key, 'tokens', tokens, 'last_refill', last_refill)\n  return { 0, math.floor(tokens) }\nend\n```\n\n## User-ID vs IP Key Extraction\n\nStandard rate limiting relies purely on client IP addresses. However, on shared office networks, university campuses, or mobile carrier NATs (Carrier-Grade NAT), hundreds of legitimate users share a single outward IP. Under pure IP throttling, one user's burst traffic blocks everyone on that network.\n\nWe implemented a **two-tier identity extractor** in the Axum middleware:\n- **Public / Unauthenticated routes (`/auth/*`):** Keyed strictly on IP address (`rl:auth:ip:<ip>`), pulling client IP from `CF-Connecting-IP` (Cloudflare spoof-proof header), with fallbacks to `X-Forwarded-For` and socket address.\n- **Authenticated API routes (`/api/*`):** The middleware inspects the `Authorization: Bearer <token>` header, performs a non-authoritative claim decode for the `sub` (User ID), and keys the bucket to `rl:api:user:<user_id>`. If unauthenticated or token expired, it gracefully falls back to IP-level throttling.\n\n## Fail-Open Strategy\n\nRedis outages should never take down the entire booking API. Our custom middleware borrows connections from a `deadpool_redis::Pool` with a strict 200ms timeout. If Redis is unreachable or times out, the error is recorded to structured `tracing` logs, and the middleware **fails open**, allowing the request to proceed to the database."
-      },
-      {
-        "id": "transactional-outbox-worker",
-        "title": "Designing a Transactional Outbox Pattern with RabbitMQ & Worker Service",
-        "date": "2026-10-22",
-        "summary": "Eliminating dual-write failure modes in asynchronous booking workflows using PostgreSQL, CloudAMQP, and a dedicated worker.",
-        "tags": ["rabbitmq", "postgresql", "outbox-pattern", "architecture"],
-        "content": "## The Dual-Write Problem\n\nIn our turf booking system, confirming a booking requires two distinct actions:\n1. Update booking status to `CONFIRMED` and record payment in PostgreSQL.\n2. Emit a message to notify background workers to generate a PDF invoice and send an email confirmation via SMTP/Brevo.\n\nA naive approach executes:\n```rust\n// Anti-pattern: Dual Write Hazard\ndb.commit_payment(&booking_id).await?;\namqp_channel.publish(\"booking.confirmed\", &payload).await?;\n```\n\nIf the server crashes or the network drops after the database commit but before message publishing, the booking is recorded but the user never receives their confirmation or invoice. Conversely, if message publishing happens first and the database transaction rolls back, the user receives an invoice for a booking that does not exist in the database.\n\n## The Transactional Outbox Pattern\n\nTo achieve guaranteed delivery without distributed 2-Phase Commit (2PC) overhead, we implemented the **Transactional Outbox Pattern**.\n\n### 1. Database Atomicity\n\nWhen a booking status changes, both the booking update and an event row in the `outbox` table are executed within the **same local ACID transaction**:\n\n```sql\nCREATE TABLE public.outbox (\n    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n    event_type      TEXT NOT NULL,\n    payload         JSONB NOT NULL,\n    status          TEXT NOT NULL DEFAULT 'queued',\n    retry_count     INTEGER NOT NULL DEFAULT 0,\n    last_error      TEXT,\n    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n```\n\nEither both succeed or both roll back. Inconsistency is mathematically impossible at write time.\n\n### 2. High-Throughput Polling with `FOR UPDATE SKIP LOCKED`\n\nAn asynchronous relay task running in the backend polls the outbox. To prevent race conditions between multiple API instances, it claims rows using Postgres row-level locking with `SKIP LOCKED`:\n\n```sql\nUPDATE public.outbox\nSET status = 'publishing'\nWHERE id IN (\n    SELECT id FROM public.outbox\n    WHERE status = 'queued'\n    ORDER BY created_at ASC\n    LIMIT 50\n    FOR UPDATE SKIP LOCKED\n)\nRETURNING id, event_type, payload;\n```\n\nEach replica grabs non-overlapping batches of events with zero locking contention.\n\n### 3. AMQP Publisher Confirms & DLQ Routing\n\nThe relay wraps payloads in an `EventEnvelope` and publishes them to a CloudAMQP **Topic Exchange** (`tbd.events`) with routing keys like `booking.created`. The relay awaits an explicit AMQP **Publisher Confirm ACK** from RabbitMQ before marking the row `status = 'done'`. If the broker rejects or drops the connection, the row status remains queued for retry with exponential backoff.\n\n### 4. Consumer Idempotency in `tbd-worker`\n\nRabbitMQ guarantees **at-least-once delivery**, which means duplicate deliveries can occur during network reconnects. The standalone `tbd-worker` process ensures idempotency by checking an indexed `processed_jobs` table prior to executing invoice generation:\n\n1. Check `SELECT 1 FROM processed_jobs WHERE event_id = $1`.\n2. If already processed, acknowledge message immediately.\n3. If new, compile HTML-to-PDF via Gotenberg, dispatch email via Resend API, insert into `processed_jobs`, and ACK the message.\n4. If an unrecoverable payload error occurs, the message is routed to `tbd.dlx` (Dead-Letter Exchange) and stored in `tbd.dlq` for operator inspection without clogging the primary queue."
-      },
-      {
-        "id": "compile-time-sql-verification",
-        "title": "Zero-Cost Compile-Time SQL Verification with SQLx in Rust",
-        "date": "2026-10-28",
-        "summary": "Catching syntax errors, column mismatches, and nullability bugs at compile time without the overhead of a heavyweight ORM.",
-        "tags": ["rust", "sqlx", "postgresql", "type-safety"],
-        "content": "## Why Avoid Heavy ORMs?\n\nIn backend development, Object-Relational Mappers (ORMs) promise ease of use by abstracting SQL. However, in high-throughput applications like sports venue booking, ORMs present significant operational costs:\n- They generate obscure, multi-join queries that defeat database query planners.\n- They make fine-grained index tuning, partial indexes, and CTEs (Common Table Expressions) cumbersome.\n- They often incur runtime allocation overhead to map dynamic types into memory structures.\n\nFor TurfBD, we selected **SQLx**, an async, pure-Rust SQL crate that provides compile-time query verification against a real database without generating hidden queries.\n\n## How `query!` Verification Works\n\nInstead of building strings at runtime, SQLx provides procedural macros such as `sqlx::query!` and `sqlx::query_as!`:\n\n```rust\npub async fn find_available_slots(\n    pool: &PgPool,\n    turf_id: Uuid,\n    target_date: NaiveDate,\n) -> Result<Vec<TimeSlot>, sqlx::Error> {\n    sqlx::query_as!(\n        TimeSlot,\n        r#\"\n        SELECT \n            id,\n            turf_id,\n            start_time,\n            end_time,\n            price_cents,\n            is_booked\n        FROM time_slots\n        WHERE turf_id = $1 AND slot_date = $2\n        ORDER BY start_time ASC\n        \"#,\n        turf_id,\n        target_date\n    )\n    .fetch_all(pool)\n    .await\n}\n```\n\nDuring `cargo check` or `cargo build`:\n1. The compiler connects to the local development PostgreSQL database via the `DATABASE_URL` environment variable.\n2. SQLx prepares the query against the live database engine.\n3. PostgreSQL validates query syntax, column identifiers, and table relations.\n4. SQLx inspects PostgreSQL's catalog to extract the exact return types and nullability of every selected column.\n5. If a column is nullable, SQLx enforces that the corresponding struct field must be an `Option<T>`. If a column is renamed or dropped in a migration, the Rust compiler fails immediately with an exact file and line number error.\n\n## Offline Mode with `.sqlx` Metadata for CI/CD\n\nWhile connecting to a live database during local compilation is seamless, running a full PostgreSQL instance inside every GitHub Actions CI check slows down pipelines.\n\nSQLx solves this with **offline mode**:\n- Locally, running `cargo sqlx prepare` analyzes all queries and exports a deterministic schema snapshot to `.sqlx/query-*.json`.\n- In GitHub Actions CI, we set `SQLX_OFFLINE=true`. The compiler validates all queries against the checked-in JSON metadata without requiring a running database service, reducing CI pipeline runtimes from minutes to seconds."
+        "summary": "A look at boundary-loophole attacks and how Token Bucket eliminates them.",
+        "content": "## Background\n\nThe fixed window counter resets at a hard boundary, so a client can send a full quota at the end of one window and another full quota at the start of the next.\n\n## The fix\n\nA Token Bucket refills continuously and allows bursts up to a capacity, with the check-and-take done atomically in a Redis Lua script.\n\n```lua\n-- placeholder: replace with the real script\nreturn 1\n```\n\n> TODO: replace this sample note with the real write-up.",
+        "tags": ["redis", "rate-limiting", "rust"]
       }
     ]
   },
   {
-    "id": "adaptiveworld2d",
-    "title": "AdaptiveWorld2D — Procedural 2D Game with Self-Healing AI Pipeline",
-    "github_url": "",
-    "demo_url": "",
-    "summary": "2D game prototype in Unity featuring an autonomous, self-healing content generation pipeline powered by the Gemini API.",
-    "description": "AdaptiveWorld2D is a research-oriented 2D game prototype built in Unity (C#) exploring resilient procedural generation and autonomous game systems. It integrates the Gemini API using structured JSON schema constraints to dynamically author narrative arcs, quest dependencies, and procedural tilemap layouts, backed by a self-healing engine that validates state transitions and repairs broken preconditions at runtime.",
-    "highlights": [
-      "Built an automated AI content pipeline validating schema integrity and self-healing broken game states in real-time",
-      "Integrated Gemini API with structured JSON output modes to generate dynamic quests and branching storylines",
-      "Designed custom C# state machines in Unity for reactive NPC behavior and procedural tilemap generation"
-    ],
-    "tags": ["Unity", "C#", "Gemini API", "Procedural Generation"],
-    "languages": { "C#": 92, "HLSL": 8 },
-    "readme_excerpt": "AdaptiveWorld2D explores real-time AI-assisted level construction and resilient state recovery in 2D Unity environments.",
-    "featured": false,
-    "order": 2,
-    "updated": "2026-11-08",
-    "notes": []
-  },
-  {
     "id": "chatdistill",
-    "title": "ChatDistill — AI Conversation Knowledge Distiller",
-    "github_url": "",
+    "title": "ChatDistill",
+    "github_url": "https://github.com/SharukH-9s/chat_distill",
     "demo_url": "",
-    "summary": "Chrome MV3 extension that distills messy AI chats into clean, structured Markdown and PDF knowledge documents via Gemini API.",
+    "summary": "A Chrome MV3 extension built with vanilla DOM and scoped CSS.",
     "description": "ChatDistill is a Chrome Extension (Manifest V3) that transforms verbose, unstructured conversations from ChatGPT into high-signal, formatted Markdown notes and PDF summaries. Built with TypeScript, Vite, and vanilla scoped DOM rendering, it features a 2-layer extraction cascade, profile presets (Developer, Executive, Student) to guide LLM synthesis depth, and privacy-safe error telemetry.",
     "highlights": [
       "Engineered a 2-layer extraction cascade: direct API interception bypassing virtual scrolling with DOM selector fallback",
       "Designed profile presets enforcing prompt depth, focus, and token-efficient formatting via Gemini API",
       "Implemented privacy-safe error telemetry with automated DOM skeleton anonymization for zero-middlemen debugging"
     ],
-    "tags": ["Chrome MV3", "TypeScript", "Vite", "Gemini API", "Markdown"],
-    "languages": { "TypeScript": 85, "JavaScript": 10, "CSS": 5 },
-    "readme_excerpt": "ChatDistill extracts messy AI chat logs into high-signal Markdown and PDF knowledge summaries using the Gemini API.",
+    "tags": ["Chrome MV3", "JavaScript", "Gemini API"],
+    "languages": { "TypeScript": 86.4, "CSS": 11, "HTML": 2.2 },
+    "readme_excerpt": "AI Chat Knowledge Distiller Extension ChatDistill is a powerful Chrome Extension that extracts messy, unstructured conversations from ChatGPT and distills them into clean, high-signal, structured Markdown or PDF knowledge documents using the Gemini API. Instead of generic \"save as text\" tools that…",
+    "featured": false,
+    "order": 2,
+    "updated": "2026-11-08",
+    "notes": []
+  },
+  {
+    "id": "adaptiveworld2d",
+    "title": "AdaptiveWorld2D",
+    "github_url": "https://github.com/SharukH-9s/adaptive_world_2D",
+    "demo_url": "",
+    "summary": "TODO: one-line pitch. A 2D game with a self-healing AI-powered content pipeline.",
+    "description": "TODO: full description of AdaptiveWorld2D.",
+    "highlights": [],
+    "tags": ["Unity", "C#", "Gemini API"],
+    "languages": {},
+    "readme_excerpt": "",
     "featured": false,
     "order": 3,
     "updated": "2026-11-08",

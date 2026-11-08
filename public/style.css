@@ -480,22 +480,66 @@ html {
   margin-right: var(--space-1);
 }
 
-.terminal-logs {
+.cli-info {
   display: grid;
   gap: 0.35rem;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: #94a3b8;
   line-height: 1.45;
-  word-break: break-word;
 }
 
-.log-time {
-  color: #64748b;
-}
-
-.log-tag {
+.cli-key {
   color: #38bdf8;
   font-weight: 600;
+}
+
+.cli-val {
+  color: #e2e8f0;
+}
+
+.cli-projects {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.775rem;
+}
+
+.cli-section-title {
+  color: #cbd5e1;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.cli-tag {
+  color: #a78bfa;
+}
+
+.cli-project-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cli-tree-branch {
+  color: #475569;
+  font-weight: 400;
+}
+
+.cli-pname {
+  color: #f1f5f9;
+  font-weight: 600;
+  min-width: 105px;
+}
+
+.cli-pstack {
+  color: #64748b;
+  font-size: 0.725rem;
 }
 
 .terminal-stats {
@@ -534,6 +578,14 @@ html {
 @media (max-width: 480px) {
   .terminal-card {
     font-size: 0.75rem;
+  }
+  .cli-project-row {
+    flex-direction: column;
+    gap: 0.1rem;
+    white-space: normal;
+  }
+  .cli-pstack {
+    padding-left: 1.25rem;
   }
   .terminal-stats {
     grid-template-columns: 1fr;

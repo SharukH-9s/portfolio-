@@ -242,6 +242,56 @@
     targets.forEach((node) => observer.observe(node));
   }
 
+  /* ---------- Copy email ---------- */
+
+  function initCopyEmail() {
+    const button = document.getElementById('copy-email');
+    const status = document.getElementById('copy-status');
+    if (!button) return;
+    const label = button.textContent;
+    let timer;
+
+    function report(message) {
+      button.textContent = message;
+      if (status) status.textContent = message;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        button.textContent = label;
+        if (status) status.textContent = '';
+      }, 2000);
+    }
+
+    function legacyCopy(text) {
+      const area = el('textarea', { readonly: '', 'aria-hidden': 'true' });
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.append(area);
+      area.select();
+      let ok = false;
+      try {
+        ok = document.execCommand('copy');
+      } catch {
+        ok = false;
+      }
+      area.remove();
+      return ok;
+    }
+
+    button.addEventListener('click', async () => {
+      const email = button.dataset.email;
+      let ok = false;
+      try {
+        await navigator.clipboard.writeText(email);
+        ok = true;
+      } catch {
+        ok = legacyCopy(email);
+      }
+      report(ok ? 'Copied!' : 'Copy failed');
+    });
+  }
+
   initReveal();
+  initCopyEmail();
   loadProjects();
 })();
